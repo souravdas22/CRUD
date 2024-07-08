@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const Post = require("../model/post");
+const Product = require("../model/product");
 class Controller {
   async default(req, res) {
     try {
@@ -18,7 +19,7 @@ class Controller {
   async getAllusers(req, res) {
     try {
       const data = await User.find();
-      res.status(200).json({ status: 200, data: data });
+      res.status(200).json({ status: 200,message:'users fetched successfully', data: data });
     } catch (err) {
       console.log(err);
       res.status(500).json({ error: "Internal server error" });
@@ -43,7 +44,7 @@ class Controller {
   async getAllPosts(req, res) {
     try {
       const response = await Post.find();
-      res.status(200).json({ status: 200, data: response });
+      res.status(200).json({ status: 200,message:'post fetched successfully', data: response });
     } catch (err) {
       res.status(500).json({ error: `Internal server error${err}` });
     }
@@ -60,6 +61,38 @@ class Controller {
       }
     } catch (err) {
       res.status(500).json({ error: `Internal server error ${err}` });
+    }
+  }
+
+  //product
+
+  //post request
+  async postProduct(req, res) {
+    try {
+      const data = req.body;
+      const newProduct = new Product(data);
+      const response = await newProduct.save();
+      if (response) {
+        res
+          .status(200)
+          .json({ message: "product added successfully", status: 200 });
+      }
+    } catch (err) {
+      res.status(500).json({ error: `Internal server Error ${err}` });
+    }
+  }
+
+  //get all products
+  async getAllProducts(req, res) {
+    try {
+      const data = await Product.find();
+      if (data) {
+        res
+          .status(200)
+          .json({ message: "products fetched successfully", status: 200 ,data:data});
+      }
+    } catch (err) {
+      res.status(500).json({ error: `Internal server Error ${err}` });
     }
   }
 }
