@@ -19,10 +19,46 @@ class Controller {
   async getAllusers(req, res) {
     try {
       const data = await User.find();
-      res.status(200).json({ status: 200,message:'users fetched successfully', data: data });
+      res.status(200).json({
+        status: 200,
+        message: "users fetched successfully",
+        data: data,
+      });
     } catch (err) {
       console.log(err);
       res.status(500).json({ error: "Internal server error" });
+    }
+  }
+  async updateUser(req, res) {
+    try {
+      const id = req.params.id;
+      const newData = req.body;
+      const response = await User.findByIdAndUpdate(id, newData, {
+        new: true,
+        runValidators: true,
+      });
+      if (response) {
+        res
+          .status(200)
+          .json({ message: "User updated sucessfully", status: 200 });
+      } else {
+        res.status(404).json({ message: "user not found", status: 404 });
+      }
+    } catch (err) {
+      res.status(500).json({ error: `Internal server error ${err}` });
+    }
+  }
+  async deleteUser(req, res) {
+    try {
+      const id = req.params.id;
+      const response = await User.findByIdAndDelete(id);
+      if (response) {
+        res
+          .status(200)
+          .json({ message: "User deleted sucessfully", status: 200 });
+      }
+    } catch (err) {
+      res.status(500).json({ error: `Internal server error ${err}` });
     }
   }
 
@@ -44,7 +80,11 @@ class Controller {
   async getAllPosts(req, res) {
     try {
       const response = await Post.find();
-      res.status(200).json({ status: 200,message:'post fetched successfully', data: response });
+      res.status(200).json({
+        status: 200,
+        message: "post fetched successfully",
+        data: response,
+      });
     } catch (err) {
       res.status(500).json({ error: `Internal server error${err}` });
     }
@@ -87,9 +127,11 @@ class Controller {
     try {
       const data = await Product.find();
       if (data) {
-        res
-          .status(200)
-          .json({ message: "products fetched successfully", status: 200 ,data:data});
+        res.status(200).json({
+          message: "products fetched successfully",
+          status: 200,
+          data: data,
+        });
       }
     } catch (err) {
       res.status(500).json({ error: `Internal server Error ${err}` });

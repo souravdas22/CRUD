@@ -15,5 +15,12 @@ Router.post("/user", Controller.postUser);
 Router.post("/post", Controller.postPost);
 Router.post("/product", Controller.postProduct);
 
+//update
+Router.put("/user/:id", Controller.updateUser);
+
+// delete
+Router.delete("/user/:id", Controller.deleteUser);
+
+
 
 module.exports = Router;
